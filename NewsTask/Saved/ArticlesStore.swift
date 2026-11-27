@@ -30,7 +30,7 @@ final class ArticlesStore {
         isSaved(article) ? remove(article) : save(article)
     }
     
-    private func load() {
+    func load() {
         let descriptor = FetchDescriptor<SavedArticle>(
             sortBy: [SortDescriptor(\.savedAt, order: .reverse)]
         )

@@ -26,7 +26,7 @@ struct ArticleCellView: View {
             HStack {
                 Text(article.author ?? "")
                 Spacer()
-                Text(article.publishedAt, style: .relative)
+                Text(article.publishedAt.formatted(.relative(presentation: .named)))
             }
             .font(.subheadline)
             .lineLimit(1)

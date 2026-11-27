@@ -33,6 +33,9 @@ struct SavedArticlesView: View {
                     .padding()
                     .animation(.snappy, value: articlesStore.savedArticles.map(\.id))
                 }
+                .refreshable {
+                    articlesStore.load()
+                }
             }
         }
         .navigationTitle("Saved")

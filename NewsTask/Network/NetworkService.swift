@@ -28,10 +28,13 @@ actor NetworkService {
     }
     
     func request<T>(_ endpoint: NewsEndpoint, ignoreCache: Bool = false) async throws -> T where T : Decodable {
-        let urlRequest = try await endpoint.makeRequest(apiKey: apiKey)
+        let urlRequest = try endpoint.makeRequest(apiKey: apiKey)
         
-        if !ignoreCache,
-           let url = urlRequest.url as NSURL?,
+        if ignoreCache {
+            cache.removeAllObjects()
+        }
+        
+        if let url = urlRequest.url as NSURL?,
            let cachedData = cache.object(forKey: url) {
             return try decode(cachedData as Data)
         }

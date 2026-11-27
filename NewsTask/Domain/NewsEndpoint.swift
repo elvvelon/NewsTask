@@ -7,11 +7,11 @@
 
 import Foundation
 
-enum NewsCategory: String, CaseIterable {
+nonisolated enum NewsCategory: String, CaseIterable {
     case general, business, entertainment, health, science, sports, technology
 }
 
-enum NewsEndpoint {
+nonisolated enum NewsEndpoint {
     // MARK: - Endpoints
     
     case topHeadlines(category: NewsCategory? = nil, page: Int, pageSize: Int = 20)
