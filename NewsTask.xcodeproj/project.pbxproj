@@ -13,7 +13,7 @@
 /* Begin PBXFileReference section */
 		D8B977BD30B8ECB0009E31E3 /* Secrets.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Secrets.xcconfig; sourceTree = "<group>"; };
 		D8B977BF30B8ECDA009E31E3 /* Secrets.xcconfig.example */ = {isa = PBXFileReference; lastKnownFileType = text; path = Secrets.xcconfig.example; sourceTree = "<group>"; };
-		D8B977C330B8EFFF009E31E3 /* NewsTask.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; name = NewsTask.app; path = "/Users/vvelon/Documents/NewsTask/build/Debug-iphoneos/NewsTask.app"; sourceTree = "<absolute>"; };
+		D8B9786330B95828009E31E3 /* NewsTask.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NewsTask.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -55,6 +55,7 @@
 				D82D65FD30B86B0500EBEBDD /* NewsTask */,
 				D8B977BD30B8ECB0009E31E3 /* Secrets.xcconfig */,
 				D8B977BF30B8ECDA009E31E3 /* Secrets.xcconfig.example */,
+				D8B9786330B95828009E31E3 /* NewsTask.app */,
 			);
 			sourceTree = "<group>";
 		};
@@ -81,7 +82,7 @@
 				D82D662430B882C500EBEBDD /* Kingfisher */,
 			);
 			productName = NewsTask;
-			productReference = D8B977C330B8EFFF009E31E3 /* NewsTask.app */;
+			productReference = D8B9786330B95828009E31E3 /* NewsTask.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */

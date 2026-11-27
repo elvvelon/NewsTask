@@ -15,8 +15,8 @@ final class ArticlesListViewModel {
     var searchQuery = ""
     var category: NewsCategory?
     
+    var errorMessage: String?
     private(set) var isLoading = false
-    private(set) var errorMessage: String?
     private(set) var hasMorePages = true
     private var nextPage = 1
     private let pageSize = 20
@@ -29,11 +29,7 @@ final class ArticlesListViewModel {
     func firstLoad(force: Bool = false) async {
         guard force || articles.isEmpty, !isLoading else { return }
         
-        isLoading = true
-        errorMessage = nil
-        defer { isLoading = false }
-        
-        do {
+        await perform {
             let fetchedArticles = try await fetchPage(1, ignoreCache: force)
             try Task.checkCancellation()
             withAnimation {
@@ -41,30 +37,33 @@ final class ArticlesListViewModel {
                 hasMorePages = !fetchedArticles.isEmpty
             }
             nextPage = 2
-        } catch is CancellationError {
-            return
-        } catch {
-            errorMessage = error.localizedDescription
         }
     }
     
     func loadNextPage() async {
         guard !isLoading, hasMorePages else { return }
         
-        isLoading = true
-        errorMessage = nil
-        defer { isLoading = false }
-        
-        do {
+        await perform {
             let fetchedArticles = try await fetchPage(nextPage)
             withAnimation {
                 articles.append(contentsOf: fetchedArticles)
                 hasMorePages = !fetchedArticles.isEmpty
             }
             nextPage += 1
-        } catch is CancellationError {
+        }
+    }
+    
+    private func perform(_ action: () async throws -> Void) async {
+        isLoading = true
+        errorMessage = nil
+        defer { isLoading = false }
+        
+        do {
+            try await action()
+        } catch let urlError as URLError where urlError.code == .cancelled {
             return
         } catch {
+            guard !Task.isCancelled else { return }
             errorMessage = error.localizedDescription
         }
     }

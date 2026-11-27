@@ -33,8 +33,25 @@ struct ArticlesListView: View {
             }
             .padding()
         }
+        .background {
+            if !vm.searchQuery.isEmpty && vm.articles.isEmpty {
+                ContentUnavailableView.search(text: vm.searchQuery)
+            }
+        }
+        
+        .overlay(alignment: .top) {
+            if let errorMessage = vm.errorMessage {
+                ErrorBannerView(message: errorMessage) {
+                    vm.errorMessage = nil
+                }
+                .transition(.move(edge: .top).combined(with: .opacity))
+            }
+        }
+        .animation(.snappy, value: vm.errorMessage)
+        
         .scrollDismissesKeyboard(.interactively)
         .navigationBarTitleDisplayMode(.inline)
+        
         .task { await vm.firstLoad() }
         .refreshable {
             await vm.firstLoad(force: true)
