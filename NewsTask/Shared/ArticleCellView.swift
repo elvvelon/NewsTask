@@ -63,6 +63,7 @@ struct ArticleCellView: View {
                         .placeholder { Color.gray.opacity(0.3) }
                         .fade(duration: 0.25)
                         .scaledToFill()
+                        // Double tap only adds to saved, removing is done with the button
                         .onTapGesture(count: 2) {
                             if !isSaved { onFavTap() }
                             likeTrigger += 1

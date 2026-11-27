@@ -8,6 +8,8 @@
 import Foundation
 import SwiftData
 
+/// Keeps saved articles in SwiftData.
+/// One instance is shared by all screens, so the bookmark state is the same everywhere.
 @Observable @MainActor
 final class ArticlesStore {
     private let container: ModelContainer

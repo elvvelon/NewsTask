@@ -27,6 +27,11 @@ actor NetworkService {
         self.cache.countLimit = cacheLimit
     }
     
+    /// Loads data for the endpoint and decodes it.
+    ///
+    /// Successful responses are cached by URL.
+    /// - Parameter ignoreCache: If `true`, the whole cache is cleared and fresh data is loaded.
+    ///   Used for pull to refresh, so the next pages are not taken from the old cache.
     func request<T>(_ endpoint: NewsEndpoint, ignoreCache: Bool = false) async throws -> T where T : Decodable {
         let urlRequest = try endpoint.makeRequest(apiKey: apiKey)
         

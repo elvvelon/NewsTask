@@ -8,6 +8,8 @@
 import SwiftUI
 import SwiftData
 
+/// Creates screens with their dependencies.
+/// It is passed through the SwiftUI environment, so views don't need to know about the network or the database.
 @MainActor
 final class AppFactory {
     private let newsProvider: NewsProvider

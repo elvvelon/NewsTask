@@ -26,6 +26,9 @@ final class ArticlesListViewModel {
         self.category = category
     }
     
+    /// Loads the first page and replaces the current articles.
+    /// - Parameter force: If `true`, loads even when articles are already there and skips the cache.
+    ///   Used for pull to refresh and for a new search query.
     func firstLoad(force: Bool = false) async {
         guard force || articles.isEmpty, !isLoading else { return }
         
@@ -53,6 +56,8 @@ final class ArticlesListViewModel {
         }
     }
     
+    /// Runs a loading action: updates `isLoading` and shows an error message if it fails.
+    /// Cancelled requests (for example, when the search query changes) are not shown as errors.
     private func perform(_ action: () async throws -> Void) async {
         isLoading = true
         errorMessage = nil

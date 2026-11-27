@@ -5,6 +5,7 @@
 //  Created by vvelon on 26.11.2026.
 //
 
+/// Source of news articles. Lets view models work with the real API or with a mock.
 protocol NewsProvider: Sendable {
     func fetchTopHeadlines(category: NewsCategory?, page: Int, pageSize: Int, ignoreCache: Bool) async throws -> [Article]
     func searchNews(query: String, page: Int, pageSize: Int, ignoreCache: Bool) async throws -> [Article]

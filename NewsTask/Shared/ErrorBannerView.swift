@@ -8,6 +8,8 @@
 
 import SwiftUI
 
+/// Error message at the top of the screen.
+/// Hides after 3.5 seconds or when the user taps it.
 struct ErrorBannerView: View {
     let message: String
     let onDismiss: () -> Void
