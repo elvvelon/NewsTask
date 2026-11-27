@@ -1,5 +1,5 @@
 //
-//  MockNewsService.swift
+//  MockNewsProvider.swift
 //  NewsTask
 //
 //  Created by vvelon on 26.11.2026.
