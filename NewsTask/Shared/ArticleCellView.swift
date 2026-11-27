@@ -17,6 +17,7 @@ struct ArticleCellView: View {
     @ScaledMetric private var spacing = 12
     @State private var likeTrigger = 0
     let article: Article
+    let isSaved: Bool
     let onFavTap: () -> Void
     
     var body: some View {
@@ -63,7 +64,7 @@ struct ArticleCellView: View {
                         .fade(duration: 0.25)
                         .scaledToFill()
                         .onTapGesture(count: 2) {
-                            if !article.isSaved { onFavTap() }
+                            if !isSaved { onFavTap() }
                             likeTrigger += 1
                         }
                 }
@@ -78,7 +79,7 @@ struct ArticleCellView: View {
         HStack(spacing: 18) {
             Button(
                 "Save",
-                systemImage: article.isSaved ? "bookmark.fill" : "bookmark",
+                systemImage: isSaved ? "bookmark.fill" : "bookmark",
                 action: onFavTap
             )
             
@@ -114,7 +115,7 @@ struct ArticleCellView: View {
 #Preview {
     @Previewable @State var article = Article.mockList.first!
     VStack {
-        ArticleCellView(article: article) { article.isSaved.toggle() }
+        ArticleCellView(article: article, isSaved: article.isSaved) { article.isSaved.toggle() }
     }
     .padding()
 }

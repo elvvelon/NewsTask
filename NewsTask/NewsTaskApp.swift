@@ -10,7 +10,7 @@ import SwiftData
 
 @main
 struct NewsTaskApp: App {
-    let appFactory: AppFactory
+    private let appFactory: AppFactory
     
     init() {
         guard let apiKey = Bundle.main.object(forInfoDictionaryKey: "NewsAPIKey") as? String,
@@ -20,9 +20,17 @@ struct NewsTaskApp: App {
             fatalError("API key not found!")
         }
 
+        let container: ModelContainer
+        do {
+            container = try ModelContainer(for: SavedArticle.self)
+        } catch {
+            fatalError("Failed to create ModelContainer: \(error)")
+        }
+        
         let networkService = NetworkService(apiKey: apiKey)
         let newsProvider = NewsAPIProvider(networkService: networkService)
-        appFactory = AppFactory(newsProvider: newsProvider)
+        let articlesStore = ArticlesStore(container: container)
+        appFactory = AppFactory(newsProvider: newsProvider, articlesStore: articlesStore)
     }
     
     var body: some Scene {

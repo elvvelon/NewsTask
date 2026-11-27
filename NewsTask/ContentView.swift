@@ -9,7 +9,6 @@ import SwiftUI
 import SwiftData
 
 struct ContentView: View {
-//    @Environment(\.modelContext) private var modelContext
     @Environment(\.appFactory) private var appFactory
 
     var body: some View {
@@ -24,6 +23,12 @@ struct ContentView: View {
             Tab("Categories", systemImage: "list.bullet") {
                 NavigationStack {
                     CategoriesView()
+                }
+            }
+            
+            Tab("Saved", systemImage: "bookmark") {
+                NavigationStack {
+                    appFactory.makeSavedArticlesView()
                 }
             }
         }

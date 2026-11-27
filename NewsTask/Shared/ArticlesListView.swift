@@ -10,14 +10,15 @@ import SwiftUI
 struct ArticlesListView: View {
     @ScaledMetric private var spacing = 16
     @State var vm: ArticlesListViewModel
+    let articlesStore: ArticlesStore
     let searchable: Bool
     
     var body: some View {
         ScrollView(.vertical) {
             LazyVStack(spacing: spacing) {
                 ForEach(vm.articles) { article in
-                    ArticleCellView(article: article) {
-                        // TODO: Add to favourites
+                    ArticleCellView(article: article, isSaved: articlesStore.isSaved(article)) {
+                        articlesStore.toggle(article)
                     }
                     .task {
                         if article.id == vm.articles.last?.id {

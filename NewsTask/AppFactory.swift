@@ -6,13 +6,16 @@
 //
 
 import SwiftUI
+import SwiftData
 
 @MainActor
 final class AppFactory {
     private let newsProvider: NewsProvider
+    let articlesStore: ArticlesStore
     
-    init(newsProvider: NewsProvider) {
+    init(newsProvider: NewsProvider, articlesStore: ArticlesStore) {
         self.newsProvider = newsProvider
+        self.articlesStore = articlesStore
     }
     
     func makeArticlesListView(
@@ -23,12 +26,21 @@ final class AppFactory {
             newsProvider: newsProvider,
             category: category
         )
-        return ArticlesListView(vm: vm, searchable: searchable)
+        return ArticlesListView(vm: vm, articlesStore: articlesStore, searchable: searchable)
+    }
+    
+    func makeSavedArticlesView() -> SavedArticlesView {
+        SavedArticlesView(articlesStore: articlesStore)
     }
 }
 
 extension AppFactory {
-    static let mock = AppFactory(newsProvider: MockNewsProvider())
+    static let mock: AppFactory = {
+        let config = ModelConfiguration(isStoredInMemoryOnly: true)
+        let container = try! ModelContainer(for: SavedArticle.self, configurations: config)
+        let store = ArticlesStore(container: container)
+        return AppFactory(newsProvider: MockNewsProvider(), articlesStore: store)
+    }()
 }
 
 extension EnvironmentValues {
