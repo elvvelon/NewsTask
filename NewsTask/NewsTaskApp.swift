@@ -10,23 +10,25 @@ import SwiftData
 
 @main
 struct NewsTaskApp: App {
-    var sharedModelContainer: ModelContainer = {
-        let schema = Schema([
-            Item.self,
-        ])
-        let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
-
-        do {
-            return try ModelContainer(for: schema, configurations: [modelConfiguration])
-        } catch {
-            fatalError("Could not create ModelContainer: \(error)")
+    let appFactory: AppFactory
+    
+    init() {
+        guard let apiKey = Bundle.main.object(forInfoDictionaryKey: "NewsAPIKey") as? String,
+              !apiKey.isEmpty,
+              apiKey != "$(NEWS_API_KEY)"
+        else {
+            fatalError("API key not found!")
         }
-    }()
 
+        let networkService = NetworkService(apiKey: apiKey)
+        let newsProvider = NewsAPIProvider(networkService: networkService)
+        appFactory = AppFactory(newsProvider: newsProvider)
+    }
+    
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .environment(\.appFactory, appFactory)
         }
-        .modelContainer(sharedModelContainer)
     }
 }
