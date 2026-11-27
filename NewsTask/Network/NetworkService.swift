@@ -12,24 +12,28 @@ actor NetworkService {
     private let decoder: JSONDecoder
     private let apiKey: String
     
-    private var cache: [URL: Data] = [:]
+    private let cache = NSCache<NSURL, NSData>()
     
     init(
         session: URLSession = .shared,
         decoder: JSONDecoder = .init(),
-        apiKey: String
+        apiKey: String,
+        cacheLimit: Int = 50
     ) {
         self.session = session
         self.decoder = decoder
         self.apiKey = apiKey
         self.decoder.dateDecodingStrategy = .iso8601
+        self.cache.countLimit = cacheLimit
     }
     
-    func request<T>(_ endpoint: NewsEndpoint) async throws -> T where T : Decodable {
+    func request<T>(_ endpoint: NewsEndpoint, ignoreCache: Bool = false) async throws -> T where T : Decodable {
         let urlRequest = try await endpoint.makeRequest(apiKey: apiKey)
         
-        if let url = urlRequest.url, let cachedData = cache[url] {
-            return try decode(cachedData)
+        if !ignoreCache,
+           let url = urlRequest.url as NSURL?,
+           let cachedData = cache.object(forKey: url) {
+            return try decode(cachedData as Data)
         }
 
         let (data, response) = try await session.data(for: urlRequest)
@@ -41,15 +45,11 @@ actor NetworkService {
             throw NetworkError.invalidResponse(statusCode: httpResponse.statusCode)
         }
 
-        if let url = urlRequest.url {
-            cache[url] = data
+        if let url = urlRequest.url as NSURL? {
+            cache.setObject(data as NSData, forKey: url)
         }
 
         return try decode(data)
-    }
-    
-    func clearCache() {
-        cache.removeAll()
     }
     
     private func decode<T: Decodable>(_ data: Data) throws -> T {

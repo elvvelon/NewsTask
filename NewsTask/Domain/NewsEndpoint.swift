@@ -21,8 +21,8 @@ enum NewsEndpoint {
     
     private var path: String {
         return switch self {
-        case .topHeadlines: "/top-headlines"
-        case .search: "/everything"
+        case .topHeadlines: "/v2/top-headlines"
+        case .search: "/v2/everything"
         }
     }
     
